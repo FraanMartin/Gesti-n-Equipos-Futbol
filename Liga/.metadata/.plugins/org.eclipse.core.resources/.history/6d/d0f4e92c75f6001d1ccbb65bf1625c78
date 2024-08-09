@@ -1,0 +1,164 @@
+package paquete;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
+import java.awt.Color;
+import javax.swing.JScrollPane;
+import java.awt.Toolkit;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+
+public class Vista {
+
+	private JFrame frmLigaSantander;
+	private Panel panel = new Panel();
+	private Vista_barcelona v2;
+	private Liga l = new Liga();
+	private Connection c;
+	private JTable table;
+	private DefaultTableModel modelo = new DefaultTableModel();
+
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Vista window = new Vista();
+					window.frmLigaSantander.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Vista() {
+		c = l.getConexion();
+		initialize();
+		
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmLigaSantander = new JFrame();
+		frmLigaSantander.setIconImage(Toolkit.getDefaultToolkit().getImage(Vista.class.getResource("/paquete/icono_liga.png")));
+		frmLigaSantander.setTitle("Liga Santander");
+		frmLigaSantander.setSize(800, 600);
+		//frmLigaSantander.setLocationRelativeTo(null);
+		frmLigaSantander.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmLigaSantander.getContentPane().setLayout(null);
+		frmLigaSantander.getContentPane().add(panel);
+		frmLigaSantander.setResizable(false);
+		/*
+		l.inicializarTablas();
+        l.insertarEquipo("Barcelona", 85);
+        l.insertarEquipo("Real Madrid", 71);
+        l.insertarEquipo("Atletico de Madrid", 69);
+        l.insertarEquipo("Real Sociedad", 62);
+        l.insertarEquipo("Villareal", 57);
+        l.insertarEquipo("Betis", 55);
+        l.insertarEquipo("Girona", 48);
+        l.insertarEquipo("Athletic", 47);
+        l.insertarEquipo("Osasuna", 47);
+        l.insertarEquipo("Sevilla", 47);
+        l.insertarEquipo("Rayo Vallecano", 46);
+        l.insertarEquipo("Mallorca", 44);
+        l.insertarEquipo("Celta de Vigo", 39);
+        l.insertarEquipo("Valencia", 37);
+        l.insertarEquipo("Almeria", 36);
+        l.insertarEquipo("Cadiz", 35);
+        l.insertarEquipo("Valladolid", 35);
+        l.insertarEquipo("Getafe", 35);
+        l.insertarEquipo("Espanyol", 31);
+        l.insertarEquipo("Elche", 19);
+
+        String[] nombres = {"atletico.jpg", "madrid.jpg", "escudobascelona.png"};
+        
+		JButton barcelona = new JButton("");
+		barcelona.setBackground(Color.WHITE);
+		barcelona.setIcon(new ImageIcon("img/escudobarcelona.png"));
+		barcelona.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        if (e.getActionCommand().equals("")) {
+		            v2 = new Vista_barcelona(c); 
+		  
+		        }
+		    }
+		});
+		barcelona.setBounds(76, 143, 70, 70);
+		panel.add(barcelona);
+		
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(531, 143, 231, 343);
+		panel.add(scrollPane);
+		
+		table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+			
+				return false;
+			}
+		};
+	
+		scrollPane.setViewportView(table);
+		
+		JButton btnNewButton = new JButton("Mostrar / Actualizar Datos");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				l.mostrarEquipos(modelo);
+	            table.setModel(modelo);
+			}
+		});
+		btnNewButton.setBounds(531, 98, 231, 21);
+		panel.add(btnNewButton);
+	*/	
+		JButton madrid_1 = new JButton("");
+		madrid_1.setIcon(new ImageIcon("img/atletico.jpg"));
+		madrid_1.setBounds(288, 143, 70, 70);
+		panel.add(madrid_1);
+		
+		JButton madrid_2 = new JButton("");
+		madrid_2.setBounds(404, 143, 70, 70);
+		panel.add(madrid_2);
+		
+		JButton madrid = new JButton("");
+		madrid.setIcon(new ImageIcon("img/madrid.jpg"));
+		madrid.setBounds(183, 143, 70, 70);
+		panel.add(madrid);
+		
+		JPanel panelEquipos = new JPanel();
+		panelEquipos.setBounds(76, 258, 393, 253);
+		panel.add(panelEquipos);
+		panelEquipos.setLayout(new GridLayout(0, 4, 0, 0));
+		JButton b;
+		for (int i = 0; i < 16; i++) {
+			b = new JButton("");
+			b.setBackground(Color.WHITE);
+			panelEquipos.add(b);
+		}
+		
+	
+		
+	}
+}

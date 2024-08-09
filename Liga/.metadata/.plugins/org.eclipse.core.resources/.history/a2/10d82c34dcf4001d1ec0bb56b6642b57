@@ -1,0 +1,17 @@
+package paquete;
+
+import java.awt.*;
+
+import javax.swing.*;
+
+public class Panel extends JPanel {
+	
+	public Image fondo = new ImageIcon("liga.png").getImage();
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.drawImage(fondo, 0, 0, null);
+	}
+	
+}

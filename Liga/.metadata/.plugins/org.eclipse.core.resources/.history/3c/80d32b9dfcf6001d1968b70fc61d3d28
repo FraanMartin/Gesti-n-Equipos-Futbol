@@ -1,0 +1,226 @@
+package paquete;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.DefaultTableModel;
+
+public class Vista_barcelona extends JFrame {
+	
+	private Connection c;
+	private JTable table;
+	private Liga l = new Liga();
+	private JTextField jugador;
+	private JTextField equipo;
+	private JTextField edad;
+	private JTextField pais;
+	private JTextField posicion;
+	private JTable table_1;
+	private DefaultTableModel modelo = new DefaultTableModel();
+	private String escudo;
+	private String nomEquipo;
+
+	
+	public Vista_barcelona(Connection conex, String escudo, String equipo) {
+		this.escudo = escudo;
+		nomEquipo = equipo;
+		c = conex;
+		
+		initialize();
+		this.setVisible(true);
+	}
+	
+	
+	@SuppressWarnings("serial")
+	public void initialize() {
+		this.setSize(800, 600);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setResizable(false);
+		
+		getContentPane().setLayout(null);
+		
+		l.usarDB();
+		
+		JLabel barcelona = new JLabel("");
+		barcelona.setIcon(new ImageIcon("img/" + escudo));
+		barcelona.setBounds(340, 45, 70, 70);
+		getContentPane().add(barcelona);
+		
+		jugador = new JTextField();
+		jugador.setText("Jugador");
+		jugador.setBounds(133, 167, 96, 19);
+		getContentPane().add(jugador);
+		jugador.setColumns(10);
+		
+		
+		equipo = new JTextField();
+		equipo.setText(nomEquipo);
+		equipo.setBounds(133, 214, 96, 19);
+		getContentPane().add(equipo);
+		equipo.setColumns(10);
+		equipo.setEditable(false);
+		String equipo_string = equipo.getText();
+
+		edad = new JTextField();
+		edad.setText("20");
+		edad.setBounds(133, 272, 96, 19);
+		getContentPane().add(edad);
+		edad.setColumns(10);
+		String edad_string = edad.getText();
+		int edad_int = Integer.parseInt(edad_string);
+
+		pais = new JTextField();
+		pais.setText("España");
+		pais.setBounds(133, 328, 96, 19);
+		getContentPane().add(pais);
+		pais.setColumns(10);
+		String pais_string = pais.getText();
+
+		posicion = new JTextField();
+		posicion.setText("DC");
+		posicion.setBounds(133, 385, 96, 19);
+		getContentPane().add(posicion);
+		posicion.setColumns(10);
+		String posicion_string = posicion.getText();
+
+		JButton anadir = new JButton("Añadir Jugador");
+		anadir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				
+				
+				l.insertarJugador(jugador.getText(), nomEquipo, Integer.parseInt(edad.getText()), pais.getText(), posicion.getText());
+	            table.setModel(modelo);
+	            
+	            //Mostrar Datos de nuevo
+
+	            modelo = new DefaultTableModel();
+				l.mostrarJugadores(modelo,nomEquipo);
+	            table.setModel(modelo);
+	            table.addMouseListener(new MouseInputAdapter() {
+	            	@Override
+	            	public void mouseClicked(MouseEvent e) {
+	            		int fila = table.rowAtPoint(e.getPoint());
+	            		System.out.println("He clicado en la fila"+fila);
+	            		jugador.setText((String) table.getValueAt(fila, 0));
+	            	}
+	            });
+	            //table.getColumnModel().getColumn(table.getColumnModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
+			}
+		});
+		anadir.setBounds(90, 489, 139, 21);
+		getContentPane().add(anadir);
+		
+		JButton editar = new JButton("Editar Jugador");
+		editar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				
+				
+				l.actualizarJugador(jugador.getText(), nomEquipo, Integer.parseInt(edad.getText()), pais.getText(), posicion.getText());
+	            table.setModel(modelo);
+	            //Mostrar Datos de nuevo
+	            modelo = new DefaultTableModel();
+				l.mostrarJugadores(modelo,nomEquipo);
+	            table.setModel(modelo);
+	            table.getColumnModel().getColumn(table.getColumnModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
+			}
+		});
+		editar.setBounds(293, 489, 117, 21);
+		getContentPane().add(editar);
+		
+		JButton eliminar = new JButton("Eliminar Jugador");
+		eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				String jugador_string = jugador.getText();
+				l.borrarJugador(jugador_string, nomEquipo, edad_int, pais_string, posicion_string);
+	            table.setModel(modelo);
+	            
+	          //Mostrar Datos de nuevo
+	            modelo = new DefaultTableModel();
+				l.mostrarJugadores(modelo,nomEquipo);
+	            table.setModel(modelo);
+	            table.getColumnModel().getColumn(table.getColumnModel().getColumnCount()-1).setCellRenderer(new ButtonRenderer());
+			}
+		});
+		eliminar.setBounds(485, 489, 139, 21);
+		getContentPane().add(eliminar);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(293, 167, 431, 238);
+		this.getContentPane().add(scrollPane);
+		
+		table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+			
+				return false;
+			}
+		};
+	
+		scrollPane.setViewportView(table);
+		
+		JButton mostrar = new JButton("Mostrar / Actualizar Datos");
+		mostrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				l.mostrarJugadores(modelo,nomEquipo);
+	            table.setModel(modelo);
+	            
+
+			}
+		});
+		mostrar.setBounds(485, 68, 200, 21);
+		getContentPane().add(mostrar);
+		
+		JLabel lblNewLabel = new JLabel("Jugador");
+		lblNewLabel.setBounds(43, 170, 70, 13);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Equipo");
+		lblNewLabel_1.setBounds(43, 217, 70, 13);
+		getContentPane().add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Edad");
+		lblNewLabel_2.setBounds(43, 275, 70, 13);
+		getContentPane().add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Pais");
+		lblNewLabel_3.setBounds(43, 331, 70, 13);
+		getContentPane().add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("Posicion");
+		lblNewLabel_4.setBounds(43, 388, 70, 13);
+		getContentPane().add(lblNewLabel_4);
+		
+
+		
+	}
+	
+	public void mostrarTabla() {
+		modelo = new DefaultTableModel();
+		l.mostrarJugadores(modelo,nomEquipo);
+		 table.setModel(modelo);
+		 table.addMouseListener(new MouseInputAdapter() {
+         	@Override
+         	public void mouseClicked(MouseEvent e) {
+         		int fila = table.rowAtPoint(e.getPoint());
+         		System.out.println("He clicado en la fila"+fila);
+         		jugador.setText((String) table.getValueAt(fila, 0));
+         		edad.setText((String) table.getValueAt(fila, 2));
+         		
+         	}
+         });
+	}
+}

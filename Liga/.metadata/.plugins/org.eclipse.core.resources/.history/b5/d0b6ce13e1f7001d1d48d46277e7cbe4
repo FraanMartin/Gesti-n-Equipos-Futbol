@@ -1,0 +1,326 @@
+package paquete;
+
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
+import java.awt.Color;
+import javax.swing.JScrollPane;
+import java.awt.Toolkit;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+
+public class Vista {
+
+	private JFrame frmLigaSantander;
+	private Panel panel = new Panel();
+	private Vista_barcelona v2;
+	private Liga l = new Liga();
+	private Connection c;
+	private JTable table;
+	private DefaultTableModel modelo = new DefaultTableModel();
+
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Vista window = new Vista();
+					window.frmLigaSantander.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Vista() {
+		c = l.getConexion();
+		initialize();
+		
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmLigaSantander = new JFrame();
+		frmLigaSantander.setIconImage(Toolkit.getDefaultToolkit().getImage(Vista.class.getResource("/paquete/icono_liga.png")));
+		frmLigaSantander.setTitle("Liga Santander");
+		frmLigaSantander.setSize(800, 600);
+		//frmLigaSantander.setLocationRelativeTo(null);
+		frmLigaSantander.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmLigaSantander.getContentPane().setLayout(null);
+		frmLigaSantander.getContentPane().add(panel);
+		frmLigaSantander.setResizable(false);
+		
+		
+        l.usarDB();
+
+        
+		JButton barcelona = new JButton("");
+		barcelona.setBackground(Color.WHITE);
+		barcelona.setIcon(new ImageIcon("img/escudobarcelona.png"));
+		barcelona.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		            v2 = new Vista_barcelona(c, "escudobarcelona.png", "Barcelona" );
+		            
+		    }
+		});
+		barcelona.setBounds(76, 143, 70, 70);
+		frmLigaSantander.getContentPane().add(barcelona);
+		
+		
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(531, 143, 231, 343);
+		frmLigaSantander.getContentPane().add(scrollPane);
+		
+		table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+			
+				return false;
+			}
+		};
+	
+		scrollPane.setViewportView(table);
+		
+		JButton btnNewButton = new JButton("Mostrar / Actualizar Datos");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modelo = new DefaultTableModel();
+				l.mostrarEquipos(modelo);
+	            table.setModel(modelo);
+			}
+		});
+		btnNewButton.setBounds(531, 98, 231, 21);
+		panel.add(btnNewButton);
+	
+		JButton atletico = new JButton("");
+		atletico.setBackground(Color.WHITE);
+		atletico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "atletico.jpg", "Atletico de Madrid" );
+			}
+		});
+		atletico.setIcon(new ImageIcon("img/atletico.jpg"));
+		atletico.setBounds(288, 143, 70, 70);
+		frmLigaSantander.getContentPane().add(atletico);
+		
+		JButton real_sociedad = new JButton("");
+		real_sociedad.setIcon(new ImageIcon(Vista.class.getResource("/paquete/realsociedad.png")));
+		real_sociedad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "realsociedad.png", "Real Sociedad" );
+			}
+		});
+		real_sociedad.setBounds(404, 143, 70, 70);
+		frmLigaSantander.getContentPane().add(real_sociedad);
+		
+		JButton madrid = new JButton("");
+		madrid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		            v2 = new Vista_barcelona(c, "madrid.jpg", "Real Madrid" ); 
+			}
+		});
+		madrid.setIcon(new ImageIcon("img/madrid.jpg"));
+		madrid.setBounds(183, 143, 70, 70);
+		frmLigaSantander.getContentPane().add(madrid);
+		
+		JButton villareal = new JButton("");
+		villareal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "villareal.png", "Villareal" );
+			}
+		});
+		villareal.setIcon(new ImageIcon(Vista.class.getResource("/paquete/villareal.png")));
+		villareal.setBackground(Color.WHITE);
+		villareal.setBounds(76, 223, 70, 70);
+		frmLigaSantander.getContentPane().add(villareal);
+		
+		JButton betis = new JButton("");
+		betis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "betis.png", "Betis" );
+			}
+		});
+		betis.setIcon(new ImageIcon(Vista.class.getResource("/paquete/betis.jpg")));
+		betis.setBackground(Color.WHITE);
+		betis.setBounds(183, 223, 70, 70);
+		frmLigaSantander.getContentPane().add(betis);
+		
+		JButton girona = new JButton("");
+		girona.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "girona.jpg", "Girona" );
+			}
+		});
+		girona.setIcon(new ImageIcon(Vista.class.getResource("/paquete/girona.jpg")));
+		girona.setBackground(Color.WHITE);
+		girona.setBounds(288, 223, 70, 70);
+		frmLigaSantander.getContentPane().add(girona);
+		
+		JButton athletic = new JButton("");
+		athletic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "athletic.jpg", "Atletico de Bilbao" );
+			}
+		});
+		athletic.setIcon(new ImageIcon(Vista.class.getResource("/paquete/athletic.jpg")));
+		athletic.setBackground(Color.WHITE);
+		athletic.setBounds(404, 223, 70, 70);
+		frmLigaSantander.getContentPane().add(athletic);
+		
+		JButton osasuna = new JButton("");
+		osasuna.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "osasuna.jpg", "Osasuna" );
+			}
+		});
+		osasuna.setIcon(new ImageIcon(Vista.class.getResource("/paquete/osasuna.jpg")));
+		osasuna.setBackground(Color.WHITE);
+		osasuna.setBounds(76, 303, 70, 70);
+		frmLigaSantander.getContentPane().add(osasuna);
+		
+		JButton sevilla = new JButton("");
+		sevilla.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "sevilla.jpg", "Sevilla" );
+			}
+		});
+		sevilla.setIcon(new ImageIcon(Vista.class.getResource("/paquete/sevilla.jpg")));
+		sevilla.setBackground(Color.WHITE);
+		sevilla.setBounds(183, 303, 70, 70);
+		frmLigaSantander.getContentPane().add(sevilla);
+		
+		JButton rayo_vallecano = new JButton("");
+		rayo_vallecano.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "rallovallecano.png", "Rayo Vallecano" );
+			}
+		});
+		rayo_vallecano.setIcon(new ImageIcon(Vista.class.getResource("/paquete/rallovallecano.png")));
+		rayo_vallecano.setBackground(Color.WHITE);
+		rayo_vallecano.setBounds(288, 303, 70, 70);
+		frmLigaSantander.getContentPane().add(rayo_vallecano);
+		
+		JButton mallorca = new JButton("");
+		mallorca.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "mallorca.png", "Mallorca" );
+			}
+		});
+		mallorca.setIcon(new ImageIcon(Vista.class.getResource("/paquete/mallorca.png")));
+		mallorca.setBackground(Color.WHITE);
+		mallorca.setBounds(404, 303, 70, 70);
+		frmLigaSantander.getContentPane().add(mallorca);
+		
+		JButton celta = new JButton("");
+		celta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "celta.jpg", "Celta de Vigo" );
+			}
+		});
+		celta.setIcon(new ImageIcon(Vista.class.getResource("/paquete/celta.jpg")));
+		celta.setBackground(Color.WHITE);
+		celta.setBounds(76, 383, 70, 70);
+		frmLigaSantander.getContentPane().add(celta);
+		
+		JButton valencia = new JButton("");
+		valencia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "valencia.png", "Valencia" );
+			}
+		});
+		valencia.setIcon(new ImageIcon(Vista.class.getResource("/paquete/valencia.png")));
+		valencia.setBackground(Color.WHITE);
+		valencia.setBounds(183, 383, 70, 70);
+		frmLigaSantander.getContentPane().add(valencia);
+		
+		JButton almeria = new JButton("");
+		almeria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "almeria.jpg", "Almeria" );
+			}
+		});
+		almeria.setIcon(new ImageIcon(Vista.class.getResource("/paquete/almeria.jpg")));
+		almeria.setBackground(Color.WHITE);
+		almeria.setBounds(288, 383, 70, 70);
+		frmLigaSantander.getContentPane().add(almeria);
+		
+		JButton cadiz = new JButton("");
+		cadiz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				v2 = new Vista_barcelona(c, "cadiz.jpg", "Cadiz" );
+			}
+		});
+		cadiz.setIcon(new ImageIcon(Vista.class.getResource("/paquete/cadiz.jpg")));
+		cadiz.setBackground(Color.WHITE);
+		cadiz.setBounds(404, 383, 70, 70);
+		frmLigaSantander.getContentPane().add(cadiz);
+		
+		modelo = new DefaultTableModel();
+		l.mostrarEquipos(modelo);
+        table.setModel(modelo);
+        
+        JButton Valladolid = new JButton("");
+        Valladolid.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		v2 = new Vista_barcelona(c, "valldolid.png", "Valladolid" );
+        	}
+        });
+        Valladolid.setIcon(new ImageIcon(Vista.class.getResource("/paquete/valldolid.png")));
+        Valladolid.setBackground(Color.WHITE);
+        Valladolid.setBounds(76, 463, 70, 70);
+        frmLigaSantander.getContentPane().add(Valladolid);
+        
+        JButton Getafe = new JButton("");
+        Getafe.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		v2 = new Vista_barcelona(c, "getafe.jpg", "Getafe" );
+        	}
+        });
+        Getafe.setIcon(new ImageIcon(Vista.class.getResource("/paquete/getafe.jpg")));
+        Getafe.setBackground(Color.WHITE);
+        Getafe.setBounds(183, 463, 70, 70);
+        frmLigaSantander.getContentPane().add(Getafe);
+        
+        JButton Espanyol = new JButton("");
+        Espanyol.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		v2 = new Vista_barcelona(c, "espanyol.jpg", "Espanyol" );
+        	}
+        });
+        Espanyol.setIcon(new ImageIcon(Vista.class.getResource("/paquete/espanyol.jpg")));
+        Espanyol.setBackground(Color.WHITE);
+        Espanyol.setBounds(288, 463, 70, 70);
+        frmLigaSantander.getContentPane().add(Espanyol);
+        
+        JButton Elche = new JButton("");
+        Elche.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		v2 = new Vista_barcelona(c, "elche.jpg", "Elche" );
+        	}
+        });
+        Elche.setIcon(new ImageIcon(Vista.class.getResource("/paquete/elche.jpg")));
+        Elche.setBackground(Color.WHITE);
+        Elche.setBounds(404, 463, 70, 70);
+        frmLigaSantander.getContentPane().add(Elche);
+		
+	}
+}
